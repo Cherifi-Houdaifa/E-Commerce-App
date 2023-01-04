@@ -6,6 +6,7 @@ const sequelize = new Sequelize(
     typeof process.env.DB_URI === "string" ? process.env.DB_URI : "",
     {
         dialect: "postgres",
+        // apparently sequlize didn't work for me without this lines down
         dialectOptions: {
             native: true,
             ssl: true,

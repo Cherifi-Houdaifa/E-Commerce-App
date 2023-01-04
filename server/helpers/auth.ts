@@ -63,6 +63,7 @@ passport.use(
             done
         ) {
             try {
+                // getting the use profile picture because i wanted to store it in my database not in google's
                 const res = await fetch(profile.picture, {
                     method: "GET",
                 });
