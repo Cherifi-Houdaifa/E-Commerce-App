@@ -33,7 +33,8 @@ router.get(
                 path: "/",
                 maxAge: 1000 * 3600 * 24,
             })
-            .send("<script>window.close();</script>");
+            .send(token);
+        // .send("<script>window.close();</script>");
     }
 );
 

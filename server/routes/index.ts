@@ -8,21 +8,21 @@ import productRouter from "./product";
 import adminRouter from "./admin";
 
 // user routes
-router.get(
+router.use(
     "/user",
     passport.authenticate("jwt", { session: false }),
     userRouter
 );
 
 // product routes
-router.get(
+router.use(
     "/product",
     passport.authenticate("jwt", { session: false }),
     productRouter
 );
 
 // admin routes
-router.get(
+router.use(
     "/admin",
     passport.authenticate("jwt", { session: false }),
     adminRouter

@@ -13,7 +13,7 @@ import {
 // get current user basket
 router.get("/", getBasket);
 
-// add item to current user basket
+// add item to current user basket with product id query parameter
 router.post("/", addToBasket);
 
 // delete current user items from basket (Like checkout)

@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { Strategy as LocalStrategy } from "passport-local";
-import { Strategy as JWTStrategy } from "passport-jwt";
+import { ExtractJwt, Strategy as JWTStrategy } from "passport-jwt";
 import bcrypt from "bcrypt";
 import db from "../models/index";
 
@@ -92,13 +92,14 @@ passport.use(
     "jwt",
     new JWTStrategy(
         {
-            jwtFromRequest: (req) => {
-                let jwt = null;
-                if (req && req.cookies) {
-                    jwt = req.cookies["jwt"];
-                }
-                return jwt;
-            },
+            // jwtFromRequest: (req) => {
+            //     let jwt = null;
+            //     if (req && req.cookies) {
+            //         jwt = req.cookies["jwt"];
+            //     }
+            //     return jwt;
+            // },
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: process.env.JWT_SECRET,
         },
         async function (payload, done) {

@@ -14,10 +14,10 @@ router.get("/", getProducts);
 // create a product
 router.post("/", createProduct);
 
-// update a product
-router.put("/:productid", updateProduct);
+// update a product with productid query parameter
+router.put("/", updateProduct);
 
-// delete a product
-router.delete("/:productid", deleteProduct);
+// delete a product with productid query parameter
+router.delete("/", deleteProduct);
 
 export default router;

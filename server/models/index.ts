@@ -21,12 +21,12 @@ const Product = getProductModel(sequelize);
 User.belongsToMany(Product, {
     through: "user_product_mapping",
     foreignKey: "user_id",
-    as: "users",
+    as: "products",
 });
 Product.belongsToMany(User, {
     through: "user_product_mapping",
     foreignKey: "product_id",
-    as: "products",
+    as: "users",
 });
 
 const models = {
