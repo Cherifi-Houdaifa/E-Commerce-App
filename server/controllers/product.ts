@@ -1,6 +1,7 @@
 import { Response, NextFunction } from "express";
 import { AuthorizedRequest } from "../helpers/types";
 import db from "../models/index";
+import { Op } from "sequelize";
 
 export async function getBasket(
     req: AuthorizedRequest,
@@ -66,18 +67,61 @@ export async function getProductById(
     try {
         const { productid } = req.params;
         const product = await db.models.Product.findByPk(productid);
-		return res.status(200).json(product);
+        return res.status(200).json(product);
     } catch (err) {
         next(err);
     }
 }
-export function getProductsByCategory(
+export async function getProductsByCategory(
     req: AuthorizedRequest,
     res: Response,
     next: NextFunction
-) {}
-export function searchProductsByName(
+) {
+    try {
+        const { category } = req.query;
+        // checking if the category exists and is one of these values
+        if (
+            !category ||
+            !["Tech", "Food", "Fashion", "Fitness", "Other"].includes(
+                category.toString()
+            )
+        ) {
+            return res.status(400).json({
+                message:
+                    'Category must be: "Tech", "Food", "Fashion", "Fitness" or "Other"',
+            });
+        }
+        const products = await db.models.Product.findAll({
+            where: {
+                category: category,
+            },
+        });
+        return res.status(200).json(products);
+    } catch (err) {
+        next(err);
+    }
+}
+export async function searchProductsByName(
     req: AuthorizedRequest,
     res: Response,
     next: NextFunction
-) {}
+) {
+    try {
+        const { search } = req.query;
+        if (search === undefined || search === "") {
+            return res
+                .status(200)
+                .json({ message: "You must include a search query" });
+        }
+        const products = await db.models.Product.findAll({
+            where: {
+                name: {
+                    [Op.like]: `%${search}%`,
+                },
+            },
+        });
+        return res.status(200).json(products);
+    } catch (err) {
+        next(err);
+    }
+}
