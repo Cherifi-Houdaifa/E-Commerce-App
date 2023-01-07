@@ -27,7 +27,7 @@ export default function getProductModel(sequelize: Sequelize) {
             },
         },
         picture: {
-            type: DataTypes.BLOB,
+            type: DataTypes.BLOB("long"),
             allowNull: false,
             validate: {
                 notEmpty: true,
@@ -51,11 +51,11 @@ export default function getProductModel(sequelize: Sequelize) {
 
     return Product;
 }
-interface ProductInterface extends Model {
+export interface ProductInterface extends Model {
     name: String;
     price: number;
     description: string;
-    picture: Blob;
+    picture: Buffer;
     availability: "Available" | "Unavailable";
     category: "Tech" | "Food" | "Fashion" | "Fitness" | "Other";
 }

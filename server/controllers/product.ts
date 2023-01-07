@@ -2,6 +2,7 @@ import { Response, NextFunction } from "express";
 import { AuthorizedRequest } from "../helpers/types";
 import db from "../models/index";
 import { Op } from "sequelize";
+import { getImgMime } from "../helpers/helper";
 
 export async function getBasket(
     req: AuthorizedRequest,
@@ -16,8 +17,15 @@ export async function getBasket(
                 as: "products",
             },
         });
-
-        return res.status(200).json(user?.products);
+        const data = user?.products && user?.products.map((product) => {
+            const newProduct = product.dataValues;
+            const base64Picture = product?.picture.toString("base64");
+            newProduct.picture = `data:${getImgMime(
+                base64Picture === undefined ? "" : base64Picture
+            )};base64,${base64Picture}`;
+            return newProduct;
+        });
+        return res.status(200).json(data);
     } catch (err) {
         next(err);
     }
@@ -67,8 +75,14 @@ export async function getProductById(
     try {
         const { productid } = req.params;
         const product = await db.models.Product.findByPk(productid);
-        return res.status(200).json(product);
+        const data = product?.dataValues;
+        const base64Picture = product?.picture.toString("base64");
+        data.picture = `data:${getImgMime(
+            base64Picture === undefined ? "" : base64Picture
+        )};base64,${base64Picture}`;
+        return res.status(200).json(data);
     } catch (err) {
+        console.log(err);
         next(err);
     }
 }
@@ -96,7 +110,15 @@ export async function getProductsByCategory(
                 category: category,
             },
         });
-        return res.status(200).json(products);
+        const data = products.map((product) => {
+            const newProduct = product.dataValues;
+            const base64Picture = product?.picture.toString("base64");
+            newProduct.picture = `data:${getImgMime(
+                base64Picture === undefined ? "" : base64Picture
+            )};base64,${base64Picture}`;
+            return newProduct;
+        });
+        return res.status(200).json(data);
     } catch (err) {
         next(err);
     }
@@ -120,7 +142,15 @@ export async function searchProductsByName(
                 },
             },
         });
-        return res.status(200).json(products);
+        const data = products.map((product) => {
+            const newProduct = product.dataValues;
+            const base64Picture = product?.picture.toString("base64");
+            newProduct.picture = `data:${getImgMime(
+                base64Picture === undefined ? "" : base64Picture
+            )};base64,${base64Picture}`;
+            return newProduct;
+        });
+        return res.status(200).json(data);
     } catch (err) {
         next(err);
     }

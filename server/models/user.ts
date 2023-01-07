@@ -1,5 +1,6 @@
 // user model
 import { Sequelize, DataTypes, Model } from "sequelize";
+import { ProductInterface } from "./product";
 
 export default function getUserModel(sequelize: Sequelize) {
     const User = sequelize.define<UserInterface>("user", {
@@ -43,7 +44,7 @@ interface UserInterface extends Model {
     password?: string;
     googleid?: string;
     isAdmin: boolean;
-    products?: Array<{}>;
+    products?: Array<ProductInterface>;
     getProducts: Function;
     setProducts: Function;
     addProduct: Function;

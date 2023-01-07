@@ -68,7 +68,7 @@ export const createProduct = [
                 name,
                 price,
                 description,
-                picture,
+                picture: picture.buffer,
                 availability,
                 category,
             });
