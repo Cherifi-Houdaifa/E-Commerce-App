@@ -11,6 +11,11 @@ export async function getProducts(
     next: NextFunction
 ) {
     try {
+        const isAdmin = req.user?.isAdmin;
+        if (!isAdmin) {
+            return res.status(401).json({ message: "You are not admin" });
+        }
+
         const skip =
             req.query.skip !== undefined ? Number(req.query.skip) : undefined;
         const products = await db.models.Product.findAll({
@@ -39,6 +44,11 @@ export const createProduct = [
         next: NextFunction
     ) {
         try {
+            const isAdmin = req.user?.isAdmin;
+            if (!isAdmin) {
+                return res.status(401).json({ message: "You are not admin" });
+            }
+
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return res.status(400).json({ errors: errors.array() });
@@ -94,6 +104,11 @@ export const updateProduct = [
         next: NextFunction
     ) {
         try {
+            const isAdmin = req.user?.isAdmin;
+            if (!isAdmin) {
+                return res.status(401).json({ message: "You are not admin" });
+            }
+
             const { productid } = req.query;
             if (productid === undefined) {
                 return res.status(400).json({
@@ -151,6 +166,11 @@ export async function deleteProduct(
     next: NextFunction
 ) {
     try {
+        const isAdmin = req.user?.isAdmin;
+        if (!isAdmin) {
+            return res.status(401).json({ message: "You are not admin" });
+        }
+
         const { productid } = req.query;
         if (productid === undefined) {
             return res.status(400).json({

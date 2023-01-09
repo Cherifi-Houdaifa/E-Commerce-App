@@ -16,8 +16,8 @@ router.get(
     "/google/callback",
     passport.authenticate("google", { session: false }),
     function (req, res, next) {
-        const user: { id?: string } | undefined = req.user;
-        const body = { id: user?.id };
+        const user: { id?: string; isAdmin?: boolean } | undefined = req.user;
+        const body = { id: user?.id, isAdmin: user?.isAdmin };
         const token = jwt.sign(
             body,
             process.env.JWT_SECRET ? process.env.JWT_SECRET : "",
@@ -33,8 +33,7 @@ router.get(
                 path: "/",
                 maxAge: 1000 * 3600 * 24,
             })
-            .send(token);
-        // .send("<script>window.close();</script>");
+            .send("<script>window.close();</script>");
     }
 );
 
@@ -42,8 +41,8 @@ router.post(
     "/admin",
     passport.authenticate("local", { session: false }),
     function (req, res, next) {
-        const user: { id?: string } | undefined = req.user;
-        const body = { id: user?.id };
+        const user: { id?: string; isAdmin?: boolean } | undefined = req.user;
+        const body = { id: user?.id, isAdmin: user?.isAdmin };
         const token = jwt.sign(
             body,
             process.env.JWT_SECRET ? process.env.JWT_SECRET : "",
